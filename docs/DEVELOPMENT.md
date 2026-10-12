@@ -13,6 +13,8 @@ These rules apply to every human and AI contributor. Follow them over convenienc
 - **The API layer owns auth and enforcement**: authenticate the caller, authorize every resource access (a user can only touch their own data), and validate all input (e.g. with zod). Never trust IDs, roles, or badge/earned state sent by the client.
 - **All secrets and API keys stay on the backend.** Only variables prefixed `NEXT_PUBLIC_` reach the browser, and those must be safe to be public. Never put the Supabase service-role key, Strava client secret, or any user tokens in client code or `NEXT_PUBLIC_*`.
 - Server-only modules must `import "server-only"` so the build fails if they are bundled for the client.
+- **Supabase is backend-only.** The browser has no Supabase URL or anon key; env vars are `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` (no `NEXT_PUBLIC_` variants). The service-role key bypasses RLS, so every query must be scoped to the authenticated user in API code.
+- **All tables live in the schema named by `DB_SCHEMA`** (e.g. `ra_local`), which keeps this app's data separate from other projects sharing the same Supabase DB. Create the Supabase client with that schema (`db: { schema: process.env.DB_SCHEMA }`), never write to `public`, and add the schema to Supabase's "Exposed schemas" API setting. Use a different schema name per environment.
 - Enable Supabase Row Level Security on every table as defense in depth; the API must still enforce access itself.
 - Don't log secrets or tokens. Return generic errors to clients.
 

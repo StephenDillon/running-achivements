@@ -22,7 +22,7 @@ Recreational to competitive runners with a Strava account. They want recognition
 - **Frontend**: Next.js (App Router) + Tailwind CSS, hosted on Vercel. Display only.
 - **Backend**: Next.js route handlers (REST) are the only way data is read or written. They authenticate, authorize, and validate.
 - **Auth**: Supabase Auth manages users/sessions; Strava is the initial identity provider (OAuth). Sessions are persistent (refresh tokens) — users should not have to log in constantly.
-- **Data**: Supabase Postgres. Strava tokens and activity data are stored server-side only.
+- **Data**: Supabase Postgres, in a dedicated schema (`DB_SCHEMA`) shared-DB-safe from other projects. Accessed only by the backend with the service-role key. Strava tokens and activity data are stored server-side only.
 - **Strava**: activities are synced by the backend using the user's stored OAuth token; badge evaluation runs on the backend.
 
 ## Current status
