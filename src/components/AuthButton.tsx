@@ -28,15 +28,14 @@ export default function AuthButton() {
     };
   }, [open]);
 
-  if (me === undefined) return <div className="h-8 w-32" />;
+  if (me === undefined) return <div className="h-12 w-[237px]" />;
 
   if (!me) {
     return (
-      <a
-        href="/api/v1/auth/strava"
-        className="rounded-full bg-[#fc4c02] px-4 py-1.5 text-sm font-medium text-white hover:opacity-90"
-      >
-        Connect with Strava
+      <a href="/api/v1/auth/strava" aria-label="Connect with Strava">
+        {/* Official Strava button, unmodified; must stay 48px tall per Strava brand guidelines. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/strava/connect-with-strava.svg" alt="Connect with Strava" width={237} height={48} />
       </a>
     );
   }

@@ -18,6 +18,13 @@ These rules apply to every human and AI contributor. Follow them over convenienc
 - Enable Supabase Row Level Security on every table as defense in depth; the API must still enforce access itself.
 - Don't log secrets or tokens. Return generic errors to clients.
 
+## Strava brand guidelines (required by the Strava API agreement)
+Full rules: https://developers.strava.com/guidelines/
+- Use only the official, unmodified assets in `public/strava/` (never recreate, recolor, crop or animate them). The "Powered by Strava" logo stays in the footer on every page; the login control must be the official "Connect with Strava" button (48px tall).
+- Strava's logo must be visually separate from, and less prominent than, our app name/logo. Never use it as our icon, put "Strava" in our app name, or imply Strava endorses or built this app.
+- Any link back to original Strava data (e.g. an activity) must use the exact text **View on Strava**, legible, and styled bold, underlined, or `#FC5200`.
+- Refer to the company as "Strava" in plain, truthful text.
+
 ## Stack & conventions
 - Next.js App Router, TypeScript (strict), Tailwind CSS, Supabase Postgres, deployed on Vercel.
 - **This Next.js version is newer than most training data.** Read the relevant guide in `node_modules/next/dist/docs/` before writing Next.js code.

@@ -27,7 +27,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <header className="border-b border-foreground/10">
-          <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-4">
+          <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-3">
             <Link href="/" className="font-semibold tracking-tight hover:opacity-80">
               🏅 Running Achievements
             </Link>
@@ -36,7 +36,24 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </header>
         <main className="flex-1">{children}</main>
         <footer className="border-t border-foreground/10 py-6 text-center text-sm text-foreground/50">
-          Not affiliated with Strava.
+          <div className="flex flex-col items-center gap-3">
+            {/* Official "Powered by Strava" logo, unmodified (Strava brand guidelines §1.2).
+                Black on the light theme, white on the dark theme. */}
+            <picture>
+              <source
+                media="(prefers-color-scheme: dark)"
+                srcSet="/strava/powered-by-strava-white.svg"
+              />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/strava/powered-by-strava-black.svg"
+                alt="Powered by Strava"
+                width={237}
+                height={24}
+              />
+            </picture>
+            <span>Not affiliated with or endorsed by Strava.</span>
+          </div>
         </footer>
       </body>
     </html>
