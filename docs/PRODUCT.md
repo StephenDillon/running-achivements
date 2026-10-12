@@ -10,12 +10,12 @@ Recreational to competitive runners with a Strava account. They want recognition
 
 ## Core concepts
 - **Badge**: a named achievement with a rule evaluated against a user's activities (e.g. "5K in under 25:00").
-- **Category**: a focus area that groups badges. Initial categories:
-  - **Speed** – fast times at standard distances (7:00 mile, sub-25 5K, sub-50 10K).
-  - **Distance** – longest single runs (10K, half marathon, marathon, ultra).
-  - **Consistency** – streaks and volume (weekly/monthly mileage, run streaks).
-  - **Terrain** – climbing and trail milestones.
-- **Tier**: difficulty within a category — `bronze` → `silver` → `gold` → `platinum`. A badge belongs to exactly one category and one tier.
+- **Group**: an ordered ladder of related badges, easiest to hardest — e.g. **5K**: finish a 5K → sub-40 → sub-30 → sub-25 → sub-20 → sub-18. Groups: Mile, 5K, 10K, Half Marathon, Marathon, Long Distance, Long Run Habit, Peak Week, Training Blocks, Run Streak, Weekly Rhythm, Monthly/Yearly Mileage, Total Runs. The UI shows progress per group (e.g. 2 of 6) and the "next up" badge.
+- **Category**: sections that hold groups — Speed, Distance, Marathon Training, Consistency.
+- **Milestone**: a flag (★) on the "big" badges (sub-30/25/20 5K, sub-2:00/1:30 half, sub-4:00/3:30/3:00 marathon, 5K/10K/10 mi/half/full finisher, 1,000-mile year).
+- **Levels** (Starter → Elite) were considered and dropped for now; may return.
+- **Focus**: road running and marathon training. Trail/ultra/elevation badges are out of scope for now.
+- **Catalog**: defined in `src/lib/badges.ts` (code, versioned). Each badge has a typed `rule` the backend evaluator will use against Strava data (best efforts, longest run, streaks, weekly/monthly/yearly distance, run count). `earned_badges` (db/0002) records which badge ids a user has earned.
 - **Earned badge**: a user + badge + the activity that qualified it + date earned.
 
 ## Planned architecture (high level)
@@ -26,7 +26,7 @@ Recreational to competitive runners with a Strava account. They want recognition
 - **Strava**: activities are synced by the backend using the user's stored OAuth token; badge evaluation runs on the backend.
 
 ## Current status
-Skeleton only: layout and a landing page with placeholder category cards. **No auth, no database, no Strava integration yet.**
+Auth (Strava + Supabase), profile/disconnect, and the badge catalog + gallery pages are built. **Not built yet:** activity sync and badge evaluation, so no badges are awarded.
 
 ## Roadmap (rough order)
 1. Skeleton UI + Vercel deploy

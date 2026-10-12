@@ -1,5 +1,7 @@
 import { Suspense } from "react";
-import { categories, tiers } from "@/lib/badges";
+import Link from "next/link";
+import BadgeGroupCard from "@/components/BadgeGroupCard";
+import { badges, groups } from "@/lib/badges";
 
 const authErrors: Record<string, string> = {
   denied: "Strava sign-in was cancelled.",
@@ -33,29 +35,27 @@ export default function Home({ searchParams }: PageProps<"/">) {
           Connect Strava and earn badges for the runs that matter — from your first fast mile to
           the full marathon.
         </p>
-        <div className="mt-6 flex justify-center gap-2">
-          {tiers.map((t) => (
-            <span key={t} className="rounded-full border border-foreground/15 px-3 py-1 text-xs">
-              {t}
-            </span>
-          ))}
-        </div>
+        <Link
+          href="/badges"
+          className="mt-8 inline-block rounded-full bg-foreground px-5 py-2 text-sm font-medium text-background hover:opacity-90"
+        >
+          Browse all {badges.length} badges
+        </Link>
       </section>
 
-      <section className="mt-16 grid gap-4 sm:grid-cols-2">
-        {categories.map((c) => (
-          <article key={c.name} className="rounded-2xl border border-foreground/10 p-6">
-            <h2 className="text-xl font-semibold">{c.name}</h2>
-            <p className="mt-1 text-sm text-foreground/70">{c.blurb}</p>
-            <ul className="mt-4 flex flex-wrap gap-2">
-              {c.examples.map((e) => (
-                <li key={e} className="rounded-md bg-foreground/5 px-2.5 py-1 text-xs">
-                  {e}
-                </li>
-              ))}
-            </ul>
-          </article>
-        ))}
+      <section className="mt-16">
+        <h2 className="text-2xl font-semibold">Ladders to climb</h2>
+        <p className="mt-1 text-sm text-foreground/70">
+          Every distance is a ladder: finish it, then break 40, 30, 25 minutes and beyond.
+        </p>
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          {["mile", "5k", "half", "marathon"].map((id) => (
+            <BadgeGroupCard key={id} group={groups.find((g) => g.id === id)!} />
+          ))}
+        </div>
+        <Link href="/badges" className="mt-4 inline-block text-sm underline">
+          See all {groups.length} groups
+        </Link>
       </section>
     </div>
   );

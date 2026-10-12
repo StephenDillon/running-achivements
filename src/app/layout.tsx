@@ -27,11 +27,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <header className="border-b border-foreground/10">
-          <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-3">
+          <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-6 py-3">
             <Link href="/" className="font-semibold tracking-tight hover:opacity-80">
               🏅 Running Achievements
             </Link>
-            <AuthButton />
+            <div className="flex items-center gap-6">
+              <Link href="/badges" className="text-sm hover:underline">
+                Badges
+              </Link>
+              <AuthButton />
+            </div>
           </div>
         </header>
         <main className="flex-1">{children}</main>
