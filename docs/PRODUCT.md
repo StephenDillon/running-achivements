@@ -25,7 +25,7 @@ Recreational to competitive runners with a Strava account. They want recognition
 - **Strava**: activities are synced by the backend using the user's stored OAuth token; badge evaluation runs on the backend.
 
 ## Current status
-Auth (Strava + Supabase), profile/disconnect, and the badge catalog + gallery pages are built. **Not built yet:** activity sync and badge evaluation, so no badges are awarded.
+Auth (Strava + Supabase), profile/disconnect, and the badge catalog + gallery pages are built. Activity sync and badge awarding are built (see docs/SYNC.md); a new-badge popup shows what was just earned.
 
 ## Roadmap (rough order)
 1. Skeleton UI + Vercel deploy

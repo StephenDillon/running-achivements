@@ -3,7 +3,7 @@
 // `rule` describes how the backend evaluator will award each badge from Strava run data (not built yet).
 
 const MILE = 1609.344; // meters
-const mi = (n: number) => Math.round(n * MILE);
+const mi = (n: number) => n * MILE;
 const km = (n: number) => n * 1000;
 const HALF = 21097.5;
 const MARATHON = 42195;
@@ -20,7 +20,7 @@ export const categories = [
 export type CategoryId = (typeof categories)[number]["id"];
 
 export type Rule =
-  // Fastest effort at a distance (Strava best efforts) at or under maxSeconds.
+  // Fastest effort at a distance (Strava best efforts) strictly under maxSeconds ("sub-25" means < 25:00).
   | { type: "best_time"; distanceM: number; maxSeconds: number }
   // Longest single run at or over meters.
   | { type: "longest_run"; meters: number }
@@ -208,3 +208,5 @@ export const groups: Group[] = [
 ];
 
 export const badges = groups.flatMap((g) => g.badges);
+
+export const badgeById = new Map(groups.flatMap((g) => g.badges.map((b) => [b.id, { badge: b, group: g }] as const)));
