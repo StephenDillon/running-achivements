@@ -3,7 +3,8 @@ import { categories, type Group } from "@/lib/badges";
 // Presentational: renders one ladder of badges. `earned` maps badge id -> ISO date earned.
 // Server/client agnostic; the client wrapper supplies earned data from the API.
 export default function BadgeGroupCard({ group, earned }: { group: Group; earned?: Record<string, string> }) {
-  const color = categories.find((c) => c.id === group.category)!.color;
+  const category = categories.find((c) => c.id === group.category)!;
+  const color = category.color;
   const done = group.badges.filter((b) => earned?.[b.id]).length;
   const next = earned ? group.badges.find((b) => !earned[b.id]) : undefined;
   const total = group.badges.length;
@@ -11,7 +12,10 @@ export default function BadgeGroupCard({ group, earned }: { group: Group; earned
   return (
     <article className="rounded-2xl border border-foreground/10 p-5">
       <div className="flex items-baseline justify-between gap-3">
-        <h3 className="text-lg font-semibold">{group.name}</h3>
+        <div className="flex flex-wrap items-center gap-2">
+          <h3 className="text-lg font-semibold">{group.name}</h3>
+          <span className={`rounded-full px-2 py-0.5 text-xs ${category.tag}`}>{category.name}</span>
+        </div>
         {earned && (
           <span className="shrink-0 text-sm text-foreground/60">
             {done} of {total}
@@ -51,14 +55,6 @@ export default function BadgeGroupCard({ group, earned }: { group: Group; earned
                 >
                   {badge.emblem}
                 </div>
-                {badge.milestone && (
-                  <span
-                    aria-label="Milestone"
-                    className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-foreground text-[10px] text-background"
-                  >
-                    ★
-                  </span>
-                )}
                 {isEarned && (
                   <span className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-background text-xs text-emerald-600 ring-1 ring-foreground/20">
                     ✓

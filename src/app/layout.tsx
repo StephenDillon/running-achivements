@@ -31,12 +31,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <Link href="/" className="font-semibold tracking-tight hover:opacity-80">
               🏅 Running Achievements
             </Link>
-            <div className="flex items-center gap-6">
-              <Link href="/badges" className="text-sm hover:underline">
-                Badges
-              </Link>
-              <AuthButton />
-            </div>
+            <AuthButton />
           </div>
         </header>
         <main className="flex-1">{children}</main>

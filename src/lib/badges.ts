@@ -11,10 +11,10 @@ const mins = (m: number) => m * 60;
 const hms = (h: number, m: number) => h * 3600 + m * 60;
 
 export const categories = [
-  { id: "speed", name: "Speed", blurb: "Break time barriers from the mile to the marathon.", color: "bg-sky-500" },
-  { id: "distance", name: "Distance", blurb: "Go farther than you ever have.", color: "bg-emerald-500" },
-  { id: "training", name: "Marathon Training", blurb: "Long runs, big weeks and full training blocks.", color: "bg-violet-500" },
-  { id: "consistency", name: "Consistency", blurb: "Streaks, weekly habits and mileage over time.", color: "bg-amber-500" },
+  { id: "speed", name: "Speed", blurb: "Break time barriers from the mile to the marathon.", color: "bg-sky-500", tag: "bg-sky-500/15 text-sky-700 dark:text-sky-300" },
+  { id: "distance", name: "Distance", blurb: "Go farther than you ever have.", color: "bg-emerald-500", tag: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300" },
+  { id: "training", name: "Marathon Training", blurb: "Long runs, big weeks and full training blocks.", color: "bg-violet-500", tag: "bg-violet-500/15 text-violet-700 dark:text-violet-300" },
+  { id: "consistency", name: "Consistency", blurb: "Streaks, weekly habits and mileage over time.", color: "bg-amber-500", tag: "bg-amber-500/15 text-amber-700 dark:text-amber-300" },
 ] as const;
 
 export type CategoryId = (typeof categories)[number]["id"];
@@ -45,7 +45,6 @@ export type Badge = {
   name: string;
   description: string;
   emblem: string; // short text shown on the medal
-  milestone?: boolean; // a "big" achievement, marked with a star
   rule: Rule;
 };
 
@@ -57,13 +56,13 @@ export type Group = {
   badges: Badge[]; // ordered easiest -> hardest
 };
 
-const b = (id: string, name: string, emblem: string, description: string, rule: Rule, milestone = false): Badge => ({
-  id, name, emblem, description, rule, ...(milestone ? { milestone } : {}),
+const b = (id: string, name: string, emblem: string, description: string, rule: Rule): Badge => ({
+  id, name, emblem, description, rule,
 });
 
 // Time-goal badge, e.g. t("5k-sub-25", "Sub-25 5K", "<25", "Run a 5K in under 25 minutes.", km(5), mins(25))
-const t = (id: string, name: string, emblem: string, description: string, distanceM: number, maxSeconds: number, milestone = false) =>
-  b(id, name, emblem, description, { type: "best_time", distanceM, maxSeconds }, milestone);
+const t = (id: string, name: string, emblem: string, description: string, distanceM: number, maxSeconds: number) =>
+  b(id, name, emblem, description, { type: "best_time", distanceM, maxSeconds });
 
 export const groups: Group[] = [
   // ── Speed ──────────────────────────────────────────────────────
@@ -82,18 +81,18 @@ export const groups: Group[] = [
   {
     id: "5k", name: "5K", category: "speed", blurb: "Finish one, then keep shaving time.",
     badges: [
-      b("dist-5k", "5K Finisher", "5K", "Run 5 kilometers in one go.", { type: "longest_run", meters: km(5) }, true),
+      b("dist-5k", "5K Finisher", "5K", "Run 5 kilometers in one go.", { type: "longest_run", meters: km(5) }),
       t("5k-sub-40", "Sub-40 5K", "<40", "Run a 5K in under 40 minutes.", km(5), mins(40)),
-      t("5k-sub-30", "Sub-30 5K", "<30", "Run a 5K in under 30 minutes.", km(5), mins(30), true),
-      t("5k-sub-25", "Sub-25 5K", "<25", "Run a 5K in under 25 minutes.", km(5), mins(25), true),
-      t("5k-sub-20", "Sub-20 5K", "<20", "Run a 5K in under 20 minutes.", km(5), mins(20), true),
+      t("5k-sub-30", "Sub-30 5K", "<30", "Run a 5K in under 30 minutes.", km(5), mins(30)),
+      t("5k-sub-25", "Sub-25 5K", "<25", "Run a 5K in under 25 minutes.", km(5), mins(25)),
+      t("5k-sub-20", "Sub-20 5K", "<20", "Run a 5K in under 20 minutes.", km(5), mins(20)),
       t("5k-sub-18", "Sub-18 5K", "<18", "Run a 5K in under 18 minutes.", km(5), mins(18)),
     ],
   },
   {
     id: "10k", name: "10K", category: "speed", blurb: "Double the distance, double the fun.",
     badges: [
-      b("dist-10k", "10K Finisher", "10K", "Run 10 kilometers in one go.", { type: "longest_run", meters: km(10) }, true),
+      b("dist-10k", "10K Finisher", "10K", "Run 10 kilometers in one go.", { type: "longest_run", meters: km(10) }),
       t("10k-sub-60", "Sub-60 10K", "<60", "Run a 10K in under an hour.", km(10), mins(60)),
       t("10k-sub-50", "Sub-50 10K", "<50", "Run a 10K in under 50 minutes.", km(10), mins(50)),
       t("10k-sub-45", "Sub-45 10K", "<45", "Run a 10K in under 45 minutes.", km(10), mins(45)),
@@ -104,23 +103,23 @@ export const groups: Group[] = [
   {
     id: "half", name: "Half Marathon", category: "speed", blurb: "13.1 miles, and how fast you can do it.",
     badges: [
-      b("dist-half", "Half Marathoner", "13.1", "Run 13.1 miles in one go.", { type: "longest_run", meters: HALF }, true),
+      b("dist-half", "Half Marathoner", "13.1", "Run 13.1 miles in one go.", { type: "longest_run", meters: HALF }),
       t("half-sub-2-30", "Sub-2:30 Half", "<2:30", "Run a half marathon in under 2:30.", HALF, hms(2, 30)),
-      t("half-sub-2", "Sub-2:00 Half", "<2:00", "Break two hours for a half marathon.", HALF, hms(2, 0), true),
+      t("half-sub-2", "Sub-2:00 Half", "<2:00", "Break two hours for a half marathon.", HALF, hms(2, 0)),
       t("half-sub-1-45", "Sub-1:45 Half", "<1:45", "Run a half marathon in under 1:45.", HALF, hms(1, 45)),
-      t("half-sub-1-30", "Sub-1:30 Half", "<1:30", "Run a half marathon in under 1:30.", HALF, hms(1, 30), true),
+      t("half-sub-1-30", "Sub-1:30 Half", "<1:30", "Run a half marathon in under 1:30.", HALF, hms(1, 30)),
       t("half-sub-1-20", "Sub-1:20 Half", "<1:20", "Run a half marathon in under 1:20.", HALF, hms(1, 20)),
     ],
   },
   {
     id: "marathon", name: "Marathon", category: "speed", blurb: "26.2 miles. Finish it, then chase the clock.",
     badges: [
-      b("dist-marathon", "Marathoner", "26.2", "Run 26.2 miles in one go.", { type: "longest_run", meters: MARATHON }, true),
+      b("dist-marathon", "Marathoner", "26.2", "Run 26.2 miles in one go.", { type: "longest_run", meters: MARATHON }),
       t("marathon-sub-5", "Sub-5:00 Marathon", "<5:00", "Finish a marathon in under 5 hours.", MARATHON, hms(5, 0)),
       t("marathon-sub-4-30", "Sub-4:30 Marathon", "<4:30", "Finish a marathon in under 4:30.", MARATHON, hms(4, 30)),
-      t("marathon-sub-4", "Sub-4:00 Marathon", "<4:00", "Break four hours for a marathon.", MARATHON, hms(4, 0), true),
-      t("marathon-sub-3-30", "Sub-3:30 Marathon", "<3:30", "Finish a marathon in under 3:30.", MARATHON, hms(3, 30), true),
-      t("marathon-sub-3", "Sub-3:00 Marathon", "<3:00", "Break three hours for a marathon.", MARATHON, hms(3, 0), true),
+      t("marathon-sub-4", "Sub-4:00 Marathon", "<4:00", "Break four hours for a marathon.", MARATHON, hms(4, 0)),
+      t("marathon-sub-3-30", "Sub-3:30 Marathon", "<3:30", "Finish a marathon in under 3:30.", MARATHON, hms(3, 30)),
+      t("marathon-sub-3", "Sub-3:00 Marathon", "<3:00", "Break three hours for a marathon.", MARATHON, hms(3, 0)),
     ],
   },
 
@@ -128,7 +127,7 @@ export const groups: Group[] = [
   {
     id: "long-distance", name: "Long Distance", category: "distance", blurb: "The big single runs between and beyond the race distances.",
     badges: [
-      b("dist-10-mile", "Ten Miler", "10 mi", "Run 10 miles in one go.", { type: "longest_run", meters: mi(10) }, true),
+      b("dist-10-mile", "Ten Miler", "10 mi", "Run 10 miles in one go.", { type: "longest_run", meters: mi(10) }),
       b("dist-20-mile", "Twenty Miler", "20 mi", "Run 20 miles in one go.", { type: "longest_run", meters: mi(20) }),
       b("dist-50k", "Ultra Runner", "50K", "Run 50 kilometers in one go.", { type: "longest_run", meters: km(50) }),
     ],
@@ -194,7 +193,7 @@ export const groups: Group[] = [
     id: "yearly-miles", name: "Yearly Mileage", category: "consistency", blurb: "Miles in a single calendar year.",
     badges: [
       b("cons-year-500", "500-Mile Year", "500/yr", "Run 500 miles in a calendar year.", { type: "year_distance", meters: mi(500) }),
-      b("cons-year-1000", "1,000-Mile Year", "1K/yr", "Run 1,000 miles in a calendar year.", { type: "year_distance", meters: mi(1000) }, true),
+      b("cons-year-1000", "1,000-Mile Year", "1K/yr", "Run 1,000 miles in a calendar year.", { type: "year_distance", meters: mi(1000) }),
       b("cons-year-2000", "2,000-Mile Year", "2K/yr", "Run 2,000 miles in a calendar year.", { type: "year_distance", meters: mi(2000) }),
     ],
   },
@@ -209,4 +208,3 @@ export const groups: Group[] = [
 ];
 
 export const badges = groups.flatMap((g) => g.badges);
-export const groupsByCategory = (category: CategoryId) => groups.filter((g) => g.category === category);

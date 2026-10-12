@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react";
 import BadgeGroupCard from "@/components/BadgeGroupCard";
-import { badges, categories, groupsByCategory } from "@/lib/badges";
+import { badges, categories, groups } from "@/lib/badges";
 
 // Untrusted display layer: earned state comes from the API, which derives it server-side from Strava data.
 export default function BadgesView() {
   const [earned, setEarned] = useState<Record<string, string> | undefined>();
   const [signedIn, setSignedIn] = useState<boolean | undefined>();
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     fetch("/api/v1/badges", { cache: "no-store" })
@@ -23,37 +24,46 @@ export default function BadgesView() {
 
   const count = earned ? badges.filter((b) => earned[b.id]).length : 0;
 
+  const q = query.trim().toLowerCase();
+  const visible = groups.filter((g) => {
+    if (!q) return true;
+    const category = categories.find((c) => c.id === g.category)!.name;
+    const haystack = [g.name, category, g.blurb, ...g.badges.flatMap((b) => [b.name, b.description, b.emblem])];
+    return haystack.some((text) => text.toLowerCase().includes(q));
+  });
+
   return (
     <div>
-      <h1 className="text-3xl font-bold tracking-tight">Badges</h1>
-      <p className="mt-2 max-w-2xl text-foreground/70">
-        {earned ? (
-          <>
-            You&apos;ve earned <strong>{count}</strong> of {badges.length} badges. Each group is a ladder, from first
-            finish to fastest time.
-          </>
-        ) : (
-          <>{badges.length} badges in ladders, from first finish to fastest time.</>
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+        <input
+          type="search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search badges (e.g. 5K, marathon, streak)"
+          aria-label="Search badges"
+          className="min-w-0 flex-1 rounded-full border border-foreground/15 bg-transparent px-4 py-2 text-sm outline-none focus:border-foreground/40"
+        />
+        {earned && (
+          <span className="text-sm text-foreground/60">
+            {count} of {badges.length} earned
+          </span>
         )}
-      </p>
+      </div>
       {signedIn === false && (
         <p className="mt-3 rounded-lg bg-foreground/5 px-4 py-2 text-sm">
           Connect with Strava to track which badges you&apos;ve earned.
         </p>
       )}
-      <p className="mt-3 text-xs text-foreground/50">★ marks a milestone badge.</p>
 
-      {categories.map((cat) => (
-        <section key={cat.id} className="mt-10">
-          <h2 className="text-xl font-semibold">{cat.name}</h2>
-          <p className="text-sm text-foreground/70">{cat.blurb}</p>
-          <div className="mt-4 grid gap-4 md:grid-cols-2">
-            {groupsByCategory(cat.id).map((g) => (
-              <BadgeGroupCard key={g.id} group={g} earned={earned} />
-            ))}
-          </div>
-        </section>
-      ))}
+      {visible.length ? (
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          {visible.map((g) => (
+            <BadgeGroupCard key={g.id} group={g} earned={earned} />
+          ))}
+        </div>
+      ) : (
+        <p className="mt-10 text-center text-foreground/60">No badges match &ldquo;{query}&rdquo;.</p>
+      )}
     </div>
   );
 }

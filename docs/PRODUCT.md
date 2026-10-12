@@ -12,7 +12,6 @@ Recreational to competitive runners with a Strava account. They want recognition
 - **Badge**: a named achievement with a rule evaluated against a user's activities (e.g. "5K in under 25:00").
 - **Group**: an ordered ladder of related badges, easiest to hardest — e.g. **5K**: finish a 5K → sub-40 → sub-30 → sub-25 → sub-20 → sub-18. Groups: Mile, 5K, 10K, Half Marathon, Marathon, Long Distance, Long Run Habit, Peak Week, Training Blocks, Run Streak, Weekly Rhythm, Monthly/Yearly Mileage, Total Runs. The UI shows progress per group (e.g. 2 of 6) and the "next up" badge.
 - **Category**: sections that hold groups — Speed, Distance, Marathon Training, Consistency.
-- **Milestone**: a flag (★) on the "big" badges (sub-30/25/20 5K, sub-2:00/1:30 half, sub-4:00/3:30/3:00 marathon, 5K/10K/10 mi/half/full finisher, 1,000-mile year).
 - **Levels** (Starter → Elite) were considered and dropped for now; may return.
 - **Focus**: road running and marathon training. Trail/ultra/elevation badges are out of scope for now.
 - **Catalog**: defined in `src/lib/badges.ts` (code, versioned). Each badge has a typed `rule` the backend evaluator will use against Strava data (best efforts, longest run, streaks, weekly/monthly/yearly distance, run count). `earned_badges` (db/0002) records which badge ids a user has earned.
